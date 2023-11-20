@@ -1,5 +1,39 @@
 import React from "react";
 import CollapseWrapper from "../common/collapse";
+import PropTypes from "prop-types";
+import CardWrapper from "../common/Card";
+import Divider from "../common/divider";
+
+const SimpleComponent = ({ onLogin, onLogOut, isAuth }) => {
+    return (
+        <>
+            {isAuth ? (
+                <button className="btn btn-secondary" onClick={onLogOut}>Вийти з системи</button> ) : (
+                <button className="btn btn-primary" onClick={onLogin}>Війти</button> )
+            }
+        </>
+    );
+}
+
+SimpleComponent.propTypes = {
+    onLogin: PropTypes.func,
+    onLogOut: PropTypes.func,
+    isAuth: PropTypes.bool
+};
+
+const withFunctions = (Component) => (props) => {
+    const isAuth = localStorage.getItem('auth') ? true : false;
+    const onLogin = () => localStorage.setItem('auth', 'token');
+    const onLogOut = () => localStorage.removeItem('auth');
+
+    return (
+        <CardWrapper>
+            <Component isAuth={isAuth} onLogin={onLogin} onLogOut={onLogOut} {...props}/>
+        </CardWrapper>
+    )
+}
+
+const ComponentWithHoc = withFunctions(SimpleComponent);
 
 const HocExercise = () => {
     return (
@@ -50,11 +84,11 @@ const HocExercise = () => {
                     <code>&quot;token&quot;</code>)
                 </li>
                 <li>
-                    Передає параметри <code>onLogin</code> и{" "}
+                    Передає параметри <code>onLogin</code> і{" "}
                     <code>onLogOut</code>. Функції також знаходяться в{" "}
                     <code>withFunctions</code>. <br />
                     <code>onLogin</code> - додає <code>auth</code> в{" "}
-                    <code>localStorage</code> з будь-яким значенням (наприклад рядківу{" "}
+                    <code>localStorage</code> з будь-яким значенням (наприклад рядків у{" "}
                     <code>&quot;token&quot;</code>) <br />
                     <code>onLogOut</code> - видаляє <code>auth</code> з{" "}
                     <code>localStorage</code>
@@ -71,11 +105,13 @@ const HocExercise = () => {
                 Потім його необхідно просто вивести в шаблон
             </p>
             <p>
-                Примітка: під час виклику <code>onLogin</code> или{" "}
+                Примітка: під час виклику <code>onLogin</code> або{" "}
                 <code>onLogOut</code> кнопка в компоненті{" "}
                 <code>SimpleComponent</code> оновиться після перезавантаження
                 сторінки
             </p>
+            <Divider/>
+            <ComponentWithHoc />
         </CollapseWrapper>
     );
 };
