@@ -43,7 +43,7 @@ const ReactChildren = () => {
                 </figure>
             </CollapseWrapper>
             <CardWrapper>
-                <i className="bi bi-lightbulb"></i>Если <code>children</code> —
+                <i className="bi bi-lightbulb"></i>Якщо <code>children</code> —
                 це <code>Fragment</code>, його розглядатимуть як цілий
                 нащадок, а елементи всередині не будуть пройдені.
             </CardWrapper>
